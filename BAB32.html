@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>BAB32</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>BAB1</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Latihan Kosakata</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .card {
+    background: white;
+    padding: 30px;
+    width: 400px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  input {
+    width: 90%;
+    padding: 8px;
+    margin-top: 15px;
+  }
+  button {
+    margin-top: 20px;
+    padding: 8px 15px;
+    cursor: pointer;
+  }
+  .result {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .wrong { color: red; }
+  .correct { color: green; }
+  ol { text-align:left; max-height:400px; overflow:auto; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2 id="question"></h2>
+  <input type="text" id="answerInput" placeholder="Tulis jawaban di sini">
+  <br>
+  <button id="nextBtn">Selanjutnya</button>
+</div>
+
+<script>
+let questions = [
+{ soal: "시설", jawaban: "fasilitas" },
+{ soal: "식판", jawaban: "nampan makan" },
+{ soal: "-잖아요", jawaban: "kan" },
+{ soal: "담다", jawaban: "memasukkan / menaruh ke wadah" },
+{ soal: "-아/어 놓다", jawaban: "sudah di" },
+{ soal: "놓다", jawaban: "meletakkan" },
+{ soal: "사내", jawaban: "di dalam perusahaan" },
+{ soal: "도시락", jawaban: "bekal makan siang" },
+{ soal: "공용", jawaban: "umum" },
+{ soal: "미리", jawaban: "sebelumnya" },
+{ soal: "수칙", jawaban: "peraturan / pedoman" },
+{ soal: "할인되다", jawaban: "didiskon" },
+{ soal: "방", jawaban: "kamar" },
+{ soal: "가지다", jawaban: "memiliki" },
+{ soal: "복도", jawaban: "lorong" },
+{ soal: "나오다", jawaban: "keluar" },
+{ soal: "계단", jawaban: "tangga" },
+{ soal: "쓰다", jawaban: "memakai di kepala, pahit, menulis" },
+{ soal: "출입문", jawaban: "pintu keluar masuk" },
+{ soal: "끼리", jawaban: "kelompok, sesama" },
+{ soal: "세탁실", jawaban: "ruang cuci pakaian" },
+{ soal: "속이 시원해요", jawaban: "menjadi lega" },
+{ soal: "샤워실", jawaban: "kamar mandi" },
+{ soal: "체력 단련실", jawaban: "ruang kebugaran" },
+{ soal: "조리실", jawaban: "dapur" },
+{ soal: "주지 않도록", jawaban: "agar tidak memberi / menyebabkan" },
+{ soal: "관리실", jawaban: "ruang pengelola" },
+{ soal: "차지하다", jawaban: "menempati, mengambil bagian" },
+{ soal: "관리인", jawaban: "pengelola" },
+{ soal: "눕다", jawaban: "berbaring" },
+{ soal: "규칙을 지키다", jawaban: "mengikuti aturan" },
+{ soal: "규칙을 어기다", jawaban: "melanggar aturan" },
+{ soal: "데려오다", jawaban: "membawa seseorang" },
+{ soal: "이어폰", jawaban: "headset / earphone" },
+{ soal: "방송", jawaban: "siaran" },
+{ soal: "예의", jawaban: "sopan santun" },
+{ soal: "혼자", jawaban: "sendirian" },
+{ soal: "어긋난", jawaban: "tidak sesuai" },
+{ soal: "심리", jawaban: "psikologi" },
+{ soal: "행동", jawaban: "perilaku" },
+{ soal: "음력", jawaban: "kalender lunar" },
+{ soal: "깨끗이", jawaban: "dengan bersih" },
+{ soal: "담력", jawaban: "keberanian" },
+{ soal: "치우다", jawaban: "membereskan" },
+{ soal: "정리", jawaban: "merapikan, pengaturan" },
+{ soal: "전등", jawaban: "lampu" },
+{ soal: "능력", jawaban: "kemampuan" },
+{ soal: "냉방", jawaban: "pendingin ruangan" },
+{ soal: "난방기", jawaban: "pemanas ruangan" },
+{ soal: "등록", jawaban: "pendaftaran" },
+{ soal: "잠깐씩", jawaban: "sebentar-sebentar" },
+{ soal: "외식", jawaban: "makan di luar" },
+{ soal: "지내다", jawaban: "tinggal / menjalani" },
+{ soal: "배식대", jawaban: "tempat pengambilan makanan" },
+{ soal: "식수대", jawaban: "tempat air minum" },
+{ soal: "주방", jawaban: "dapur" },
+{ soal: "퇴식구", jawaban: "tempat pengembalian piring" },
+{ soal: "또한", jawaban: "selain itu" },
+{ soal: "식단표", jawaban: "menu makanan" },
+{ soal: "상대방", jawaban: "lawan bicara" },
+{ soal: "식권", jawaban: "kupon makan" },
+{ soal: "존중하다", jawaban: "menghormati" },
+{ soal: "공간", jawaban: "ruang" },
+];
+
+// Acak soal
+questions = questions.sort(() => Math.random() - 0.5);
+
+let index = 0;
+let score = 0;
+let userAnswers = [];
+
+const questionEl = document.getElementById("question");
+const answerInput = document.getElementById("answerInput");
+const nextBtn = document.getElementById("nextBtn");
+const card = document.querySelector(".card");
+
+function showQuestion() {
+  questionEl.textContent = "Soal " + (index + 1) + ": " + questions[index].soal;
+  answerInput.value = "";
+  answerInput.focus();
+}
+
+nextBtn.addEventListener("click", () => {
+  const userAnswer = answerInput.value.trim().toLowerCase();
+  userAnswers[index] = userAnswer; // simpan jawaban sesuai index
+
+  if (userAnswer === questions[index].jawaban) {
+    score++;
+  }
+
+  index++;
+  if (index < questions.length) {
+    showQuestion();
+  } else {
+    showResult();
+  }
+});
+
+function showResult() {
+  let answerList = "";
+  questions.forEach((q, i) => {
+    if (userAnswers[i] === q.jawaban) {
+      answerList += `<li>${q.soal} = <span class="correct">${q.jawaban}</span></li>`;
+    } else {
+      answerList += `<li>${q.soal} = <span class="correct">${q.jawaban}</span><br>
+                     Jawaban kamu: <span class="wrong">${userAnswers[i] || "(kosong)"}</span></li>`;
+    }
+  });
+
+  card.innerHTML = `
+    <h2>Hasil</h2>
+    <p class="result">Nilai: ${score} / ${questions.length}</p>
+    <hr>
+    <p>Kunci Jawaban:</p>
+    <ol>${answerList}</ol>
+  `;
+}
+
+showQuestion();
+</script>
+
+</body>
+</html>
+    
+  </body>
+  
+</html>
